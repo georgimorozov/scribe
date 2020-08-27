@@ -54,6 +54,7 @@ class PostmanCollectionWriter
                 'schema' => 'https://schema.getpostman.com/json/collection/v2.0.0/collection.json',
             ],
             'item' => $this->routeGroups->map(function (Collection $routes, $groupName) {
+
                 return [
                     'name' => $groupName,
                     'description' => $routes->first()['metadata']['groupDescription'],
@@ -73,6 +74,10 @@ class PostmanCollectionWriter
     {
         $method = $route['methods'][0];
 
+        $route['output'] = (string)view('scribe::partials.description')
+            ->with('route', $route)
+            ->render();
+
         return [
             'name' => $route['metadata']['title'] !== '' ? $route['metadata']['title'] : $route['uri'],
             'request' => [
@@ -80,7 +85,7 @@ class PostmanCollectionWriter
                 'method' => $method,
                 'header' => $this->resolveHeadersForRoute($route),
                 'body' => $this->getBodyData($route),
-                'description' => $route['metadata']['description'] ?? null,
+                'description' => $route['output'] ?? null,
                 'response' => [],
             ],
         ];
