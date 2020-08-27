@@ -31,7 +31,7 @@
           'type' => $parameter['type'] ?? null,
           'required' => $parameter['required'] ?? true,
           'description' => $parameter['description'],
-        ])<br>
+        ])
         @endcomponent
     @endforeach
 @endif
