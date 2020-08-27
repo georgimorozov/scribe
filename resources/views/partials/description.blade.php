@@ -24,8 +24,7 @@
     @endforeach
 @endif
 @if(count($route['bodyParameters']))
-    <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-    <br>
+    <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4><br>
     @foreach($route['bodyParameters'] as $attribute => $parameter)
         @component('scribe::components.field-details-postman', [
           'name' => $attribute,
@@ -33,7 +32,7 @@
           'required' => $parameter['required'] ?? true,
           'description' => $parameter['description'],
         ])
+            <br>
         @endcomponent
-        <br>
     @endforeach
 @endif
