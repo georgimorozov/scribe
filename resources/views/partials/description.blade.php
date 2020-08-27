@@ -6,7 +6,7 @@
           'type' => null,
           'required' => $parameter['required'] ?? true,
           'description' => $parameter['description'],
-        ])
+        ])<br>
         @endcomponent
     @endforeach
 @endif
@@ -18,7 +18,7 @@
           'type' => null,
           'required' => $parameter['required'] ?? true,
           'description' => $parameter['description'],
-        ])
+        ])<br>
         @endcomponent
     @endforeach
 @endif
@@ -30,7 +30,7 @@
           'type' => $parameter['type'] ?? null,
           'required' => $parameter['required'] ?? true,
           'description' => $parameter['description'],
-        ])
+        ])<br>
         @endcomponent
     @endforeach
 @endif
