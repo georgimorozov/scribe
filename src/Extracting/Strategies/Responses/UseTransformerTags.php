@@ -80,7 +80,7 @@ class UseTransformerTags extends Strategy
 
         if ((strtolower($transformerTag->getName()) == 'transformercollection')) {
             $models = [$modelInstance, $this->instantiateTransformerModel($model, $factoryStates, $relations)];
-            $resource = new Collection($models, new $transformer());
+            $resource = new Collection($models, new $transformer(), $resourceKey);
 
             ['adapter' => $paginatorAdapter, 'perPage' => $perPage] = $this->getTransformerPaginatorData($tags);
             if ($paginatorAdapter) {
