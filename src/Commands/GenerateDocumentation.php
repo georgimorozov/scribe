@@ -5,6 +5,7 @@ namespace Knuckles\Scribe\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Knuckles\Scribe\Extracting\Generator;
@@ -60,6 +61,9 @@ class GenerateDocumentation extends Command
     public function handle(RouteMatcherInterface $routeMatcher)
     {
         $this->bootstrap();
+
+        Artisan::call('migrate');
+        Artisan::call('db:seed');
 
         $noExtraction = $this->option('no-extraction');
         if ($noExtraction) {
