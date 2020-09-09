@@ -12,29 +12,27 @@ trait DatabaseTransactionHelpers
 {
     private function startDbTransaction()
     {
-        $connections = array_keys(config('database.connections', []));
+        try {
+            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
 
-        foreach ($connections as $connection) {
-            try {
-                $driver = app('db')->connection($connection);
+            $driver = app('db')->connection($connection);
 
-                if (self::driverSupportsTransactions($driver)) {
-                    $driver->beginTransaction();
+            if (self::driverSupportsTransactions($driver)) {
+                $driver->beginTransaction();
 
-                    return;
-                }
-
-                $driverClassName = get_class($driver);
-
-                if ($this->shouldAllowDatabasePersistence($driverClassName)) {
-                    throw DatabaseTransactionsNotSupported::create($connection, $driverClassName);
-                }
-
-                c::warn("Database driver [$driverClassName] for the connection [{$connection}] does not support transactions. Any changes made to your database will persist.");
-            } catch (ScribeException $e) {
-                throw $e;
-            } catch (Exception $e) {
+                return;
             }
+
+            $driverClassName = get_class($driver);
+
+            if ($this->shouldAllowDatabasePersistence($driverClassName)) {
+                throw DatabaseTransactionsNotSupported::create($connection, $driverClassName);
+            }
+
+            c::warn("Database driver [$driverClassName] for the connection [{$connection}] does not support transactions. Any changes made to your database will persist.");
+        } catch (ScribeException $e) {
+            throw $e;
+        } catch (Exception $e) {
         }
     }
 
@@ -43,23 +41,22 @@ trait DatabaseTransactionHelpers
      */
     private function endDbTransaction()
     {
-        $connections = array_keys(config('database.connections', []));
+        try {
+            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
 
-        foreach ($connections as $connection) {
-            try {
-                $driver = app('db')->connection($connection);
+            $driver = app('db')->connection($connection);
 
-                if (self::driverSupportsTransactions($driver)) {
-                    $driver->rollBack();
+            if (self::driverSupportsTransactions($driver)) {
+                $driver->rollBack();
 
-                    return;
-                }
-
-                $driverClassName = get_class($driver);
-                c::warn("Database driver [$driverClassName] for the connection [{$connection}] does not support transactions. Any changes made to your database have been persisted.");
-            } catch (Exception $e) {
+                return;
             }
+
+            $driverClassName = get_class($driver);
+            c::warn("Database driver [$driverClassName] for the connection [{$connection}] does not support transactions. Any changes made to your database have been persisted.");
+        } catch (Exception $e) {
         }
+
     }
 
     private static function driverSupportsTransactions($driver): bool
@@ -67,7 +64,7 @@ trait DatabaseTransactionHelpers
         $methods = ['beginTransaction', 'rollback'];
 
         foreach ($methods as $method) {
-            if (! method_exists($driver, $method)) {
+            if (!method_exists($driver, $method)) {
                 return false;
             }
         }

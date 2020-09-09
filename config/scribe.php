@@ -362,4 +362,9 @@ INTRO
      * Be warned: that means all database changes will persist.
      */
     'continue_without_database_transactions' => [],
+
+    /*
+     * The router your API is using (Laravel or Dingo).
+     */
+    'db_connection' => 'sqlite',
 ];
