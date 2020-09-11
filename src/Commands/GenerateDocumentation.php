@@ -62,8 +62,8 @@ class GenerateDocumentation extends Command
     {
         $this->bootstrap();
 
-        Artisan::call('migrate');
-        Artisan::call('db:seed');
+        Artisan::call('migrate --database sqlite');
+        Artisan::call('db:seed --database sqlite');
 
         $noExtraction = $this->option('no-extraction');
         if ($noExtraction) {
