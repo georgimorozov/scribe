@@ -13,7 +13,8 @@ trait DatabaseTransactionHelpers
     private function startDbTransaction()
     {
         try {
-            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
+//            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
+            $connection = 'sqlite';
 
             $driver = app('db')->connection($connection);
 
@@ -42,7 +43,8 @@ trait DatabaseTransactionHelpers
     private function endDbTransaction()
     {
         try {
-            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
+            $connection = 'sqlite';
+//            $connection = $this->getConfig()->get('db_connection') ?? 'sqlite';
 
             $driver = app('db')->connection($connection);
 
