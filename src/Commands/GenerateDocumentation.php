@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Knuckles\Scribe\Extracting\Generator;
@@ -62,8 +63,11 @@ class GenerateDocumentation extends Command
     {
         $this->bootstrap();
 
-        Artisan::call('migrate --database sqlite');
-        Artisan::call('db:seed --database sqlite');
+        config(['database.connections.default' => 'sqlite']);
+        DB::setDefaultConnection('sqlite');
+
+        Artisan::call('migrate');
+        Artisan::call('db:seed');
 
         $noExtraction = $this->option('no-extraction');
         if ($noExtraction) {
