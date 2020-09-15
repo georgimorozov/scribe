@@ -121,6 +121,8 @@ class PostmanCollectionWriter
         }
         $body['mode'] = $mode;
 
+        unset($route['cleanBodyParameters']['with']);
+
         switch ($mode) {
             case 'formdata':
                 foreach ($route['cleanBodyParameters'] as $key => $value) {
@@ -142,8 +144,6 @@ class PostmanCollectionWriter
                 break;
             case 'raw':
             default:
-                unset($route['cleanBodyParameters']['with']);
-
                 $body[$mode] = json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT);
                     $body['options'][$mode]['language'] = 'json';
         }
