@@ -78,17 +78,32 @@ class PostmanCollectionWriter
             ->with('route', $route)
             ->render();
 
-        return [
-            'name' => $route['metadata']['title'] !== '' ? $route['metadata']['title'] : $route['uri'],
-            'request' => [
-                'url' => $this->makeUrlData($route),
-                'method' => $method,
-                'header' => $this->resolveHeadersForRoute($route),
-                'body' => $this->getBodyData($route),
+        $output = [
+            'name'     => $route['metadata']['title'] !== '' ? $route['metadata']['title'] : $route['uri'],
+            'request'  => [
+                'url'         => $this->makeUrlData($route),
+                'method'      => $method,
+                'header'      => $this->resolveHeadersForRoute($route),
+                'body'        => $this->getBodyData($route),
                 'description' => $route['output'] ?? null,
-                'response' => [],
+                'response'    => $route['responses'],
             ],
+            'response' =>
+                [
+                    [
+                        'name'                     => 'Success Response',
+                        'status'                   => 'OK',
+                        'code'                     => 200,
+                        "_postman_previewlanguage" => "json",
+                    ],
+                ],
         ];
+
+        if ($route['responses']) {
+            $output['response'][0]['body'] = $route['responses'][0]['content'];
+        }
+
+        return $output;
     }
 
     protected function getBodyData(array $route): array
