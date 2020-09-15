@@ -142,8 +142,10 @@ class PostmanCollectionWriter
                 break;
             case 'raw':
             default:
+                unset($route['cleanBodyParameters']['with']);
+
                 $body[$mode] = json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT);
-                $body['options'][$mode]['language'] = 'json';
+                    $body['options'][$mode]['language'] = 'json';
         }
         return $body;
     }
