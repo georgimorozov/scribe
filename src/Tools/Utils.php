@@ -116,20 +116,32 @@ class Utils
         return (new ReflectionClass($class))->getMethod($method);
     }
 
-    public static function parseTransformerTag(string $tag){
-        $availableIncludesArray = array_map(
-            function ($availableInclude) {
-                return '<code>'.$availableInclude.'</code>';
-            },
-            ${self::transformerTagToClass($tag)}::$availableIncludesMap
-        );
+    public static function parseTransformerTag(string $tag)
+    {
+        if ($transformerClass = self::transformerTagToClass($tag)) {
+            $transformerFullClass = 'App\Transformers\\' . self::transformerTagToClass($tag);
+            $transformerInstance = new $transformerFullClass();
+            $availableIncludes = $transformerInstance->getAvailableIncludes();
+            $availableIncludesArray = array_map(
+                function ($availableInclude) {
+                    return '<code>' . $availableInclude . '</code>';
+                },
+                $availableIncludes
+            );
 
-        return implode(', ', $availableIncludesArray);
+            return implode(', ', $availableIncludesArray);
+        }
 
+        return $tag;
     }
 
     public static function transformerTagToClass(string $tag){
-        return str_replace(['<transformer>','</transformer>'], '', $tag);
+        $regex = '#<\s*?transformer\b[^>]*>(.*?)</transformer\b[^>]*>#s';
+        preg_match($regex, $tag, $matches);
+        if(!empty($matches[1])){
+            return $matches[1];
+        }
+        return null;
     }
 
     public static function stringifyArrayWithFormatting(){

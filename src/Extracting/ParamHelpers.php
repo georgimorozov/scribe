@@ -4,6 +4,7 @@ namespace Knuckles\Scribe\Extracting;
 
 use Faker\Factory;
 use Illuminate\Http\UploadedFile;
+use Knuckles\Scribe\Tools\Utils;
 use stdClass;
 
 trait ParamHelpers
@@ -168,6 +169,8 @@ trait ParamHelpers
             // Examples are parsed as strings by default, we need to cast them properly
             $example = $this->castToType($content[2], $type);
         }
+
+        $description = Utils::parseTransformerTag($description);
 
         return [$description, $example];
     }
