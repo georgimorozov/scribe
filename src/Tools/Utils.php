@@ -116,4 +116,24 @@ class Utils
         return (new ReflectionClass($class))->getMethod($method);
     }
 
+    public static function parseTransformerTag(string $tag){
+        $availableIncludesArray = array_map(
+            function ($availableInclude) {
+                return '<code>'.$availableInclude.'</code>';
+            },
+            ${self::transformerTagToClass($tag)}::$availableIncludesMap
+        );
+
+        return implode(', ', $availableIncludesArray);
+
+    }
+
+    public static function transformerTagToClass(string $tag){
+        return str_replace(['<transformer>','</transformer>'], '', $tag);
+    }
+
+    public static function stringifyArrayWithFormatting(){
+
+    }
+
 }
