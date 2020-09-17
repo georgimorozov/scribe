@@ -124,21 +124,22 @@ class Utils
     {
         if ($transformerFullClass = self::transformerTagToClass($tag)) {
             try {
-                $transformerInstance = new $transformerFullClass();
-                $availableIncludes = $transformerInstance->getAvailableIncludes();
-                $availableIncludesArray = array_map(
-                    function ($availableInclude) {
-                        return '<code>' . $availableInclude . '</code>';
+                if (class_exists($transformerFullClass)) {
+                    $transformerInstance = new $transformerFullClass();
+                    $availableIncludes = $transformerInstance->getAvailableIncludes();
+                    $availableIncludesArray = array_map(
+                        function ($availableInclude) {
+                            return '<code>' . $availableInclude . '</code>';
 //                        return $availableInclude;
-                    },
-                    $availableIncludes
-                );
+                        },
+                        $availableIncludes
+                    );
 
-                $relationshipString = implode(', ', $availableIncludesArray);
-                preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+                    $relationshipString = implode(', ', $availableIncludesArray);
+                    preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
 
-                return preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
-
+                    return preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+                }
             } catch (\Exception $exception) {
                 // Class does not exist
             }
