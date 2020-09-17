@@ -116,36 +116,45 @@ class Utils
         return (new ReflectionClass($class))->getMethod($method);
     }
 
-    public static function parseTransformerTag(string $tag)
+    /**
+     * @param string $tag
+     * @return string
+     */
+    public static function parseTransformerTagForIncludes(string $tag)
     {
-        if ($transformerClass = self::transformerTagToClass($tag)) {
-            $transformerFullClass = 'App\Transformers\\' . self::transformerTagToClass($tag);
-            $transformerInstance = new $transformerFullClass();
-            $availableIncludes = $transformerInstance->getAvailableIncludes();
-            $availableIncludesArray = array_map(
-                function ($availableInclude) {
-                    return '<code>' . $availableInclude . '</code>';
-                },
-                $availableIncludes
-            );
+        if ($transformerFullClass = self::transformerTagToClass($tag)) {
+            try {
+                $transformerInstance = new $transformerFullClass();
+                $availableIncludes = $transformerInstance->getAvailableIncludes();
+                $availableIncludesArray = array_map(
+                    function ($availableInclude) {
+                        return '<code>' . $availableInclude . '</code>';
+                    },
+                    $availableIncludes
+                );
 
-            return implode(', ', $availableIncludesArray);
+                return implode(', ', $availableIncludesArray);
+            } catch (\Exception $exception) {
+                // Class does not exist
+            }
         }
 
         return $tag;
     }
 
-    public static function transformerTagToClass(string $tag){
+    /**
+     * @param string $tag
+     * @return mixed|null
+     */
+    public static function transformerTagToClass(string $tag)
+    {
         $regex = '#<\s*?transformer\b[^>]*>(.*?)</transformer\b[^>]*>#s';
         preg_match($regex, $tag, $matches);
-        if(!empty($matches[1])){
-            return $matches[1];
+
+        if (!empty($matches[1])) {
+            return 'App\Transformers\\' . $matches[1];
         }
+
         return null;
     }
-
-    public static function stringifyArrayWithFormatting(){
-
-    }
-
 }

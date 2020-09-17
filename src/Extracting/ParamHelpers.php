@@ -170,7 +170,7 @@ trait ParamHelpers
             $example = $this->castToType($content[2], $type);
         }
 
-        $description = Utils::parseTransformerTag($description);
+        $description = Utils::parseTransformerTagForIncludes($description);
 
         return [$description, $example];
     }
