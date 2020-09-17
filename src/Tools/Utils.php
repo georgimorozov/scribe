@@ -129,11 +129,16 @@ class Utils
                 $availableIncludesArray = array_map(
                     function ($availableInclude) {
                         return '<code>' . $availableInclude . '</code>';
+//                        return $availableInclude;
                     },
                     $availableIncludes
                 );
 
-                return implode(', ', $availableIncludesArray);
+                $relationshipString = implode(', ', $availableIncludesArray);
+                preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+
+                return preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+
             } catch (\Exception $exception) {
                 // Class does not exist
             }
