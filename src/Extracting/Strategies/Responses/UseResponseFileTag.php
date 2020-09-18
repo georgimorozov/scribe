@@ -65,7 +65,7 @@ class UseResponseFileTag extends Strategy
             $status = $attributes['status'] ?: ($status ?: 200);
             $description = $attributes['scenario'] ? "$status, {$attributes['scenario']}" : "$status";
 
-            $filePath = storage_path($relativeFilePath);
+            $filePath = resource_path($relativeFilePath);
             if (! file_exists($filePath)) {
                 c::warn("@responseFile {$relativeFilePath} does not exist");
             }
