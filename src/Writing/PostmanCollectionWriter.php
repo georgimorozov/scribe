@@ -78,6 +78,16 @@ class PostmanCollectionWriter
             ->with('route', $route)
             ->render();
 
+        $description = null;
+
+        if($route['metadata']['description']){
+            $description .= $route['metadata']['description'];
+        }
+
+        if($route['output']){
+            $description .= $route['output'];
+        }
+
         $output = [
             'name'     => $route['metadata']['title'] !== '' ? $route['metadata']['title'] : $route['uri'],
             'request'  => [
@@ -85,7 +95,7 @@ class PostmanCollectionWriter
                 'method'      => $method,
                 'header'      => $this->resolveHeadersForRoute($route),
                 'body'        => $this->getBodyData($route),
-                'description' => $route['output'] ?? null,
+                'description' => $description,
                 'response'    => $route['responses'],
             ],
             'response' =>
