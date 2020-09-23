@@ -130,7 +130,6 @@ class Utils
                     $availableIncludesArray = array_map(
                         function ($availableInclude) {
                             return '<code>' . $availableInclude . '</code>';
-//                        return $availableInclude;
                         },
                         $availableIncludes
                     );
