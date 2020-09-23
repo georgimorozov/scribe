@@ -38,7 +38,7 @@ class PostmanCollectionWriter
     public function __construct(Collection $routeGroups, $baseUrl)
     {
         $this->routeGroups = $routeGroups;
-        $this->protocol = Str::startsWith($baseUrl, 'https') ? 'https' : 'http';
+        $this->protocol = config('scribe.postman.protocol') ?? '';
         $this->baseUrl = $this->getBaseUrl($baseUrl);
         $this->auth = config('scribe.postman.auth');
     }
