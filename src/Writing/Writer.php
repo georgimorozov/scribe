@@ -84,7 +84,7 @@ class Writer
         // If no config is injected, pull from global. Makes testing easier.
         $this->config = $config ?: new DocumentationConfig(config('scribe'));
         $this->baseUrl = $this->config->get('base_url') ?? config('app.url');
-        $this->postmanBaseUrl = $this->config->get('postman.base_url') ?? $this->baseUrl;
+        $this->postmanBaseUrl = $this->config->get('postman.base_url') ?? '{{domain}}';
         $this->shouldOverwrite = $shouldOverwrite;
         $this->shouldGeneratePostmanCollection = $this->config->get('postman.enabled', false);
         $this->shouldGenerateOpenAPISpec = $this->config->get('openapi.enabled', false);
