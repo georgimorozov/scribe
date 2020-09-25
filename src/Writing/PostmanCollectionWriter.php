@@ -123,7 +123,27 @@ class PostmanCollectionWriter
             $output['response'][0]['body'] = $route['responses'][0]['content'];
         }
 
+        if (!$this->authExcludedRoute($route)) {
+            $output['request']['auth'] = [
+                'type'   => 'bearer',
+                'bearer' => [
+                    'token' => '{{token}}',
+                ],
+            ];
+        }
+
         return $output;
+    }
+
+    protected function authExcludedRoute(array $route)
+    {
+        $excludedRoutes = config('scribe.postman.auth_excluded_routes');
+
+        if ($excludedRoutes && in_array($route['uri'], $excludedRoutes)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getBodyData(array $route): array
