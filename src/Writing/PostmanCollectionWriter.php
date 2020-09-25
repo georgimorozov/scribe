@@ -71,11 +71,9 @@ class PostmanCollectionWriter
         } else {
             $collection['auth'] = [
                 'type'   => 'bearer',
-                'bearer' => [[
-                    'key'   => 'token',
-                    'value' => '{{token}}',
-                    'type'  => 'string',
-                ]],
+                'bearer' => [
+                    'token' => '{{token}}',
+                ],
             ];
         }
 
