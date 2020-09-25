@@ -46,7 +46,10 @@ class PostmanCollectionWriter
     public function generatePostmanCollection()
     {
         $collection = [
-            'variables' => [],
+            'variables' => [
+                'key' => 'token',
+                'value' => 'yourtoken'
+            ],
             'info' => [
                 'name' => config('scribe.title') ?: config('app.name') . ' API',
                 '_postman_id' => Uuid::uuid4()->toString(),
@@ -63,8 +66,17 @@ class PostmanCollectionWriter
             })->values()->toArray(),
         ];
 
-        if (! empty($this->auth)) {
+        if (!empty($this->auth)) {
             $collection['auth'] = $this->auth;
+        } else {
+            $collection['auth'] = [
+                'type'   => 'bearer',
+                'bearer' => [
+                    'key'   => 'token',
+                    'value' => '{{token}}',
+                    'type'  => 'string',
+                ],
+            ];
         }
 
         return $collection;
