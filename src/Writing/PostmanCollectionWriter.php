@@ -131,7 +131,11 @@ class PostmanCollectionWriter
         }
         $body['mode'] = $mode;
 
-        unset($route['cleanBodyParameters']['with']);
+        if(!config('scribe.keep_includes')){
+            unset($route['cleanBodyParameters']['with']);
+        }
+
+        $this->recursiveClean($route['cleanBodyParameters'], "0");
 
         switch ($mode) {
             case 'formdata':
@@ -154,12 +158,21 @@ class PostmanCollectionWriter
                 break;
             case 'raw':
             default:
-                $body[$mode] = json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT);
+            $body[$mode] = json_encode($route['cleanBodyParameters'], JSON_PRETTY_PRINT);
                     $body['options'][$mode]['language'] = 'json';
         }
         return $body;
     }
 
+    protected function recursiveClean(&$array, $unwanted_key)
+    {
+        unset($array[$unwanted_key]);
+        foreach ($array as &$value) {
+            if (is_array($value)) {
+                $this->recursiveClean($value, $unwanted_key);
+            }
+        }
+    }
 
     protected function resolveHeadersForRoute($route)
     {
