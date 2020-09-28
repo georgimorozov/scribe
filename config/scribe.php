@@ -139,6 +139,21 @@ INTRO
         'auth' => null,
 
         /*
+         * Exclude these routes from having auth
+         */
+        'auth_excluded_routes' => [
+            'api/locales/list',
+            'api/captcha/get',
+            'api/countries/list',
+            'api/states/list',
+            'api/auth/register',
+            'api/auth/login',
+            'api/auth/refresh',
+            'api/auth/forgot',
+            'api/auth/reset',
+        ],
+
+        /*
          * Manually override some generated content in the spec. Dot notation is supported.
          */
         'overrides' => [
@@ -153,7 +168,7 @@ INTRO
      * Setting `laravel.add_routes` to true (above) will also add a route for the spec.
      */
     'openapi' => [
-        'enabled' => true,
+        'enabled' => false,
 
         /*
          * Manually override some generated content in the spec. Dot notation is supported.
@@ -166,7 +181,7 @@ INTRO
     /*
      * Name for the group of endpoints which do not have a @group set.
      */
-    'default_group' => 'Endpoints',
+    'default_group' => 'Uncategorized',
 
     /*
      * Custom logo path. This will be used as the value of the src attribute for the <img> tag,
@@ -364,7 +379,7 @@ INTRO
     'continue_without_database_transactions' => [],
 
     /*
-     * The router your API is using (Laravel or Dingo).
+     * Default DB connection override.
      */
     'db_connection' => 'sqlite',
 ];
