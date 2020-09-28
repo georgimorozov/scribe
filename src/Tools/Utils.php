@@ -133,11 +133,12 @@ class Utils
                         },
                         $availableIncludes
                     );
-
                     $relationshipString = implode(', ', $availableIncludesArray);
-                    preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+                    $output = preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+                    $transformerUsed = str_replace('Transformer', ' Transformer', self::transformerTagToName($tag));
+                    $output .= ' (Uses the ' . $transformerUsed . ').';
 
-                    return preg_replace('#<transformer(.*?)>(.*?)</transformer>#is', $relationshipString, $tag);
+                    return $output;
                 }
             } catch (\Exception $exception) {
                 // Class does not exist
@@ -151,15 +152,23 @@ class Utils
      * @param string $tag
      * @return mixed|null
      */
-    public static function transformerTagToClass(string $tag)
+    public static function transformerTagToClass(string $tag): ?string
     {
-        $regex = '#<\s*?transformer\b[^>]*>(.*?)</transformer\b[^>]*>#s';
-        preg_match($regex, $tag, $matches);
-
-        if (!empty($matches[1])) {
-            return 'App\Transformers\\' . $matches[1];
+        if ($transformerName = self::transformerTagToName($tag)) {
+            return 'App\Transformers\\' . $transformerName;
         }
 
         return null;
+    }
+
+    /**
+     * @param string $tag
+     * @return string|null
+     */
+    public static function transformerTagToName(string $tag): ?string
+    {
+        $regex = '#<\s*?transformer\b[^>]*>(.*?)</transformer\b[^>]*>#s';
+        preg_match($regex, $tag, $matches);
+        return $matches[1] ?? null;
     }
 }
