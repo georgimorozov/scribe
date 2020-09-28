@@ -165,8 +165,6 @@ class PostmanCollectionWriter
             unset($route['cleanBodyParameters']['with']);
         }
 
-        $this->recursiveClean($route['cleanBodyParameters'], "0");
-
         switch ($mode) {
             case 'formdata':
                 foreach ($route['cleanBodyParameters'] as $key => $value) {
