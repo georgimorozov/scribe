@@ -17,6 +17,8 @@ class ScribeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        putenv('APP_ENV=documentation');
+
         $this->loadViewsFrom(__DIR__ . '/../resources/views/', 'scribe');
 
         $this->publishes([
